@@ -8,9 +8,6 @@
     <script type="text/javascript" src={% static "js/calendar.js" %}></script>
 <!-- Is this neccessary? Needs Bootstrap -->
 
-<script language="Javascript">
-
-</script>
 {% endblock %}
 
 {% block bodyBlock %}
@@ -18,12 +15,15 @@
         <h1><strong>Health Planner</strong></h1>
     </div>
     <div>
-                <form action="/KAP/myhealth" method="post">
-                    {% csrf_token %}
-                        <table id="form_table">
-                            {{ form.as_table }}
-                        </table>
-                    <input type="submit" value="Submit" />
-                </form>
-            </div>
+        <form action="/KAP/Calender/{{ month }}-{{  year }}/" method="post">
+            {% csrf_token %}
+            <table id="form_table">
+                <tr>
+                    <th>Today's Date: {{ day }}-{{ month }}-{{ year }}</th>
+                </tr>
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
 {% endblock %}

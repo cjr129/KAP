@@ -259,20 +259,39 @@ def event_view(request, event_id):
     event = events.objects.filter(id = event_id)[0]
     return render(request, 'event.html',{'event':event})
 
+# Processing will be mainly handled here. This view should become default view after initial selection.
+# 1. workout_selection holds the intensity, large muscle selection and small muscle selection. FORMAT: intensity - large_muscle - small_muscle
+# 2. These 3 parameters will be sent to Workout Planner (bottom)
+# 3. Workout Planner calls light, medium or hard workouts based on intensity selection.
+# 4. Appropriate workout returns large exercise and small exercise in a tuple. FORMAT: (l_ex,s_ex)
+# 5. HealthNp def (below) uses the (l_ex, s_ex) tuple to print the exercises for the week.
 @login_required
 def myHealthNp (request):
     #was  using variables that were not defined so for testing i just put constants
+    day = datetime.date.today().strftime("%d")
+    year = int(datetime.date.today().strftime("%y"))
+    month = datetime.date.today().strftime("%m")
     #data = JsonResponse(workout_json_dict(workout_list))
-    generate = 0
     context_dictionary = {}
     #context_dictionary['data'] = data
-    context_dictionary['generate'] = generate
+    context_dictionary['day'] = day
+    context_dictionary['year'] = year
+    context_dictionary['month'] = month
 
     if request.method == 'POST':
         form = workout(request.POST)
         if form.is_valid():
             object = form.save(commit=False)
             object.user = request.user.username
+            object.day = day
+            object.month = month
+            object.year = year
+            object.intensity = intensity
+            object.large_muscle = large_muscle
+            object.small_muscle = small_muscle
+            muscle_selection = workoutPlanner(intensity, large_muscle, small_muscle)
+            object.l_ex = muscle_selection[0]
+            object.s_ex = muscle_selection[1]
             object.workout = 1
             object.save()
             return HttpResponseRedirect("/kap/mycalendar/")
@@ -283,12 +302,7 @@ def myHealthNp (request):
         context_dictionary['form'] = form
         return render(request, 'myHealth.html', context_dictionary)
     return render(request, 'myHealth.html', context_dictionary)
-# Processing will be mainly handled here. This view should become defualt view after initial selection.
-# 1. workout_selection holds the cal_count, large muscle selection and small muscle selection. FORMAT: cal_count - large_muscle - small_muscle
-# 2. These 3 parameters will be sent to Workout Planner (bottom)
-# 3. Workout Planner calls light, medium or hard workouts based on calorie count.
-# 4. Approriate workout returns large exercise and small exercise in a tuple. FORMAT: (l_ex,s_ex)
-# 5. main Health def (below) uses the (l_ex, s_ex) tuple to print the exercises for the week.
+
 @login_required
 def Health (request, workout_selection):
     currentDay = datetime.date.today().strftime("%d")
@@ -327,12 +341,12 @@ def Health (request, workout_selection):
         return render(request, 'myHealth.html', context_dictionary)
     return render(request, 'myHealth.html', context_dictionary)
 
-def workoutPlanner(cal_count, LMS, SMS):
-    if cal_count <= 15400:
+def workoutPlanner(intensity, LMS, SMS):
+    if intensity == "Light" or intensity == "LIT":
         (exL,exS) = light_workout(LMS, SMS)
-    elif cal_count > 15400 and cal_count <= 16800:
+    elif intensity == "Medium" or intensity == "MED":
         (exL,exS) = med_workout(LMS, SMS)
-    elif cal_count > 16800:
+    elif intensity <= "Hard" or intensity == "HRD":
         (exL,exS) = hard_workout(LMS, SMS)
 
     return (exL,exS)
@@ -407,9 +421,12 @@ def workout_json_dict(workout_list):
     i = 1
     for workout in workout_list:
         value = []
-        value.insert(0, workout.cal_count)
-        value.insert(1, workout.large_muscle)
-        value.insert(2, workout.small_muscle)
+        value.insert(0, workout.day)
+        value.insert(1, workout.month)
+        value.insert(2, workout.year)
+        value.insert(3, workout.cal_count)
+        value.insert(4, workout.large_muscle)
+        value.insert(5, workout.small_muscle)
         dict['workout_'+str(i)] = value
         i += 1
     return dict

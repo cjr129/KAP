@@ -38,6 +38,9 @@ class workout(ModelForm):
         )
     error_css_class = 'error'
 
+    month = forms.HiddenInput()
+    day = forms.HiddenInput()
+    year = forms.HiddenInput()
     cal_count = forms.IntegerField()
     large_muscle = forms.ChoiceField(choices=LARGE, required=True)
     small_muscle = forms.ChoiceField(choices=SMALL, required=True)
@@ -49,7 +52,7 @@ class workout(ModelForm):
     class Meta:
         model = workouts
 
-        fields = ('cal_count', 'large_muscle', 'small_muscle','intensity',)
+        fields = ('cal_count', 'large_muscle', 'small_muscle', 'intensity')
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
