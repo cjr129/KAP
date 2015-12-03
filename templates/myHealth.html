@@ -8,22 +8,45 @@
     <script type="text/javascript" src={% static "js/calendar.js" %}></script>
 <!-- Is this neccessary? Needs Bootstrap -->
 
+<script language="Javascript">
+
+</script>
+
+<style>
+#placeholder
+    {
+    width: 1000px;
+    height: 200px;
+    }
+</style>
+
+  <script type="text/javascript">
+  var d1 = {{ List }};
+$(document).ready(function () {
+    $.plot($("#placeholder"), [
+        {
+            data: d1,
+            bars: {
+                show: true
+            }
+        }
+    ]);
+});
+</script>
 {% endblock %}
 
 {% block bodyBlock %}
+
     <div class="col-md-4">
         <h1><strong>Health Planner</strong></h1>
     </div>
     <div>
-        <form action={{ actionUrl }} method="post">
-            {% csrf_token %}
-            <table id="form_table">
-                <tr>
-                    <th>Today's Date: {{ day }}-{{ month }}-{{ year }}</th>
-                </tr>
-                {{ form.as_table }}
-            </table>
-            <input type="submit" value="Submit Workout Plan" />
-        </form>
-    </div>
+                <form action="/KAP/myhealth" method="post">
+                    {% csrf_token %}
+                        <table id="form_table">
+                            {{ form.as_table }}
+                        </table>
+                    <input type="submit" value="Submit" />
+                </form>
+            </div>
 {% endblock %}

@@ -10,11 +10,15 @@
           </tr>
           <tr>
             <th>Date</th>
-            <td>{{ event.day }}/{{ event.month }}/{{ event.year }}</td>
+            <td>{{ event.month }}/{{ event.day }}/{{ event.year }}</td>
           </tr>
           <tr>
               <th>Time</th>
               <td>{{ event.hour }}:{{ event.min }}0</td>
+          </tr>
+          <tr>
+              <th>Location</th>
+              <td>{{ event.location }}</td>
           </tr>
         {% if event.notes %}
             <tr>
@@ -28,4 +32,7 @@
     <div class="col-md-2">
         <button type="button" class="btn btn-primary">Delete</button>
     </div>
+    {% if event.location %}
+<iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q={{event.location}}&key=AIzaSyCva3aW1mSimu9KoUvvnBJ8ndRWF3q47E8" allowfullscreen></iframe>
+{% endif %}
 {% endblock %}

@@ -10,6 +10,8 @@ class events(models.Model):
     min =models.IntegerField(null=True)
     notes = models.CharField(max_length=200, null=True)
     user = models.CharField(max_length=40, null=True)
+    url = models.CharField(max_length=200, null=True)
+    location = models.CharField(max_length=200, null=True)
 
     def __unicode__(self):
         return self.event_name
@@ -32,9 +34,9 @@ class workouts(models.Model):
         ('MED', 'Medium'),
         ('HRD', 'Hard'),
         )
-    cal_count = models.IntegerField(default=15000)
-    large_muscle = models.CharField(choices=LARGE, max_length=10)
-    small_muscle = models.CharField(choices=SMALL, max_length=10)
+    cal_count = models.IntegerField(default=15000, null=True)
+    large_muscle = models.CharField(choices=LARGE, max_length=10, null=True)
+    small_muscle = models.CharField(choices=SMALL, max_length=10, null=True)
     l_ex = models.CharField(max_length=10)
     s_ex = models.CharField(max_length=10)
     month = models.IntegerField(null=True)
@@ -45,4 +47,4 @@ class workouts(models.Model):
     workout = models.IntegerField(null=True)
 
     class Meta:
-        unique_together = (("month", "day", "year"),)
+        unique_together = (("month", "day", "year","user"),)

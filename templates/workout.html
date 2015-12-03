@@ -8,12 +8,16 @@
             <th>Workout Plan For {{ day }}-{{ month }}-{{ year }}</th>
           </tr>
           <tr>
-              <th>{{ Workout.large_muscle }}</th>
-            <td>3 x {{ Workout.l_ex }}</td>
+              <th>{{ Workout.small_muscle }}</th>
+            <td>3 x {{ Workout.s_ex }}</td>
           </tr>
           <tr>
-              <th>{{ Workout.small_muscle }}</th>
-              <td>3 x {{ Workout.s_ex }}</td>
+              <th>{{ Workout.large_muscle }}</th>
+              <td>3 x {{ Workout.l_ex }}</td>
+          </tr>
+            <tr>
+                <th>Abs</th>
+                <td>100 x sit-ups</td>
           </tr>
         </thead>
     </table>
@@ -21,7 +25,7 @@
         <div class="col-md-2">
             <div class="btn btn-info btn-lg">
                 <span id="plus" class="glyphicon glyphicon-plus"></span>
-                Add Workout
+                Edit Workout
             </div>
         </div>
 {% endblock %}

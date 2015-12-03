@@ -13,10 +13,12 @@ class event(forms.ModelForm):
     min = forms.IntegerField()
     notes = forms.CharField(max_length=200)
     user = forms.HiddenInput()
+    url = forms.HiddenInput()
+    location= forms.CharField()
     class Meta:
         model = events
 
-        fields = ('event_name', 'day', 'hour', 'min', 'notes',)
+        fields = ('event_name', 'day', 'hour', 'min', 'notes','location')
 
 class workout(ModelForm):
     LARGE = (
@@ -38,10 +40,6 @@ class workout(ModelForm):
         )
     error_css_class = 'error'
 
-    month = forms.HiddenInput()
-    day = forms.HiddenInput()
-    year = forms.HiddenInput()
-    cal_count = forms.IntegerField()
     large_muscle = forms.ChoiceField(choices=LARGE, required=True)
     small_muscle = forms.ChoiceField(choices=SMALL, required=True)
     intensity = forms.ChoiceField(choices=WI, required=True)
@@ -52,7 +50,7 @@ class workout(ModelForm):
     class Meta:
         model = workouts
 
-        fields = ('cal_count', 'large_muscle', 'small_muscle', 'intensity')
+        fields = ('large_muscle', 'small_muscle','intensity',)
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
